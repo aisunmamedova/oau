@@ -120,7 +120,9 @@ p{margin:0}
 .hero{position:relative;overflow:hidden;background:var(--violet);color:var(--ivory)}
 .hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding-block:72px 88px}
 .hero .wrap > *{min-width:0}
-.horizon{position:absolute;pointer-events:none;border-radius:50%;border:1px solid rgba(247,244,237,.12)}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 80% at 15% 50%,rgba(40,20,92,.85),rgba(40,20,92,0) 70%)}
+.hero .wrap{z-index:1}
 .hero-copy{display:flex;flex-direction:column;gap:24px}
 .hero h1 em{font-style:italic;font-weight:600;color:var(--gold)}
 .hero .lead{color:rgba(247,244,237,.88)}
@@ -134,16 +136,24 @@ p{margin:0}
 .hero-figure .crest img{width:52px}
 @media (max-width:900px){.hero .wrap{grid-template-columns:1fr;padding-block:48px 64px;gap:36px}.hero-figure{width:min(64%,280px);order:-1}}
 
-/* Feature strip */
-.strip{background:var(--white);border-bottom:1px solid var(--stone)}
-.strip ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
-.strip li{display:flex;gap:14px;align-items:flex-start;padding:28px 24px;border-left:1px solid var(--stone)}
-.strip li:first-child{border-left:0}
-.strip svg{flex:none;width:36px;height:36px;color:var(--violet)}
-.strip b{display:block;font-family:var(--f-display);font-size:1.2rem;color:var(--violet);line-height:1.2}
-.strip span{font-size:.92rem;color:var(--muted)}
-@media (max-width:900px){.strip ul{grid-template-columns:1fr 1fr}.strip li:nth-child(3){border-left:0}.strip li:nth-child(n+3){border-top:1px solid var(--stone)}}
-@media (max-width:520px){.strip ul{grid-template-columns:1fr}.strip li{border-left:0;border-top:1px solid var(--stone)}.strip li:first-child{border-top:0}}
+/* Feature strip — floating stats card */
+.strip{position:relative;z-index:2;margin-top:-64px;padding-bottom:8px}
+.stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--white);box-shadow:0 24px 60px rgba(20,23,40,.14);border-top:4px solid var(--citrus)}
+.stat{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:32px 28px 30px;border-left:1px solid var(--stone);min-width:0;transition:background .25s ease}
+.stat:first-child{border-left:0}
+.stat::after{content:"";position:absolute;left:28px;right:28px;bottom:0;height:3px;background:var(--violet);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.stat:hover{background:var(--ivory)}
+.stat:hover::after{transform:scaleX(1)}
+.stat-icon{width:48px;height:48px;border-radius:50%;background:var(--stone-soft);color:var(--violet);display:grid;place-items:center;margin-bottom:10px;transition:background .25s ease,color .25s ease}
+.stat:hover .stat-icon{background:var(--violet);color:var(--citrus)}
+.stat-icon svg{width:24px;height:24px}
+.stat-value{font-family:var(--f-display);font-weight:700;font-size:clamp(2rem,3vw,2.6rem);line-height:1;color:var(--violet);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.stat-label{font-weight:700;font-size:1rem;color:var(--ink);margin-top:6px}
+.stat-sub{font-size:.9rem;color:var(--muted);line-height:1.45}
+@media (max-width:900px){.stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--stone)}}
+@media (max-width:420px){.stat{padding:24px 18px}.stat-icon{width:40px;height:40px}}
+.hero .wrap{padding-bottom:136px}
+@media (max-width:900px){.hero .wrap{padding-bottom:112px}}
 
 /* Sections */
 .section{padding-block:96px}
@@ -159,8 +169,10 @@ p{margin:0}
 .prog-card .img img{width:100%;height:100%;object-fit:cover}
 .prog-card .body{display:flex;flex-direction:column;gap:14px;padding:28px;flex:1}
 .prog-card .level{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
-.prog-card h3{color:var(--violet)}
-.prog-card ul{margin:0;padding-left:18px;color:var(--muted);font-size:.95rem;display:grid;gap:4px}
+.prog-card{transition:transform .2s ease,box-shadow .2s ease}
+.prog-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(40,20,92,.12)}
+.prog-card h3{color:var(--violet);font-size:clamp(1.6rem,2.4vw,2rem);font-weight:700}
+.prog-card .body > p{color:var(--muted)}
 .prog-card .actions{margin-top:auto;padding-top:8px;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
 @media (max-width:900px){.prog-grid{grid-template-columns:1fr}}
 
@@ -175,33 +187,40 @@ p{margin:0}
 .video img{width:100%;height:100%;object-fit:cover;opacity:.75}
 .video button{position:absolute;inset:0;margin:auto;width:84px;height:84px;border-radius:50%;border:0;background:var(--citrus);color:var(--ink);cursor:pointer;display:grid;place-items:center}
 .video .cap{position:absolute;left:16px;bottom:14px;right:16px;color:var(--ivory);font-size:.85rem}
-.quote{margin-top:28px;background:var(--violet);color:var(--ivory);padding:32px;display:grid;gap:16px}
+.quote{margin:28px 0 0;background:var(--violet);color:var(--ivory);padding:28px;display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:center}
+.quote img{width:120px;height:150px;object-fit:cover;object-position:top;border:3px solid var(--gold)}
+.quote .q{display:grid;gap:14px}
+@media (max-width:520px){.quote{grid-template-columns:1fr}.quote img{width:96px;height:120px}}
 .quote blockquote{margin:0;font-family:var(--f-display);font-size:1.3rem;font-weight:600;line-height:1.4}
 .quote cite{font-style:normal;font-size:.92rem;color:var(--gold)}
 
-/* Brand feature cards (28px padding, 20px gap) */
-.feature-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
-.feature{padding:28px;display:flex;flex-direction:column;gap:14px;min-width:0;min-height:300px}
-.feature svg{width:44px;height:44px}
-.feature p{font-size:.98rem}
-.f-violet{background:var(--violet);color:var(--ivory)}
-.f-blue{background:var(--blue);color:var(--ivory)}
-.f-stone{background:var(--stone-soft);color:var(--ink)}
-.f-stone h3{color:var(--violet)}
-.f-gold{background:var(--gold);color:var(--ink)}
-.f-violet svg,.f-blue svg{color:var(--gold)}
-.f-stone svg,.f-gold svg{color:var(--violet)}
-@media (max-width:1000px){.feature-grid{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.feature-grid{grid-template-columns:1fr}.feature{min-height:0}}
-
-/* Steps */
-.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;counter-reset:s}
-.steps li{counter-increment:s;border-top:4px solid var(--violet);padding-top:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.steps li::before{content:"0" counter(s);font-family:var(--f-display);font-size:2.4rem;font-weight:700;color:var(--gold);line-height:1}
-.steps h3{font-size:1.2rem;color:var(--violet)}
-.steps p{color:var(--muted);font-size:.95rem}
-.steps .link-call,.steps a{font-size:.95rem}
-@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+/* Steps — interactive journey */
+.how{background:var(--white);border-block:1px solid var(--stone)}
+.journey{position:relative}
+.journey-line{position:absolute;left:12.5%;right:12.5%;top:60px;height:4px;background:var(--stone);overflow:hidden}
+.journey-line span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--citrus));transition:width 1.6s cubic-bezier(.2,.7,.2,1)}
+.journey.in .journey-line span{width:100%}
+.steps{position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.step{position:relative;min-width:0}
+.step-card{position:relative;width:100%;height:100%;text-align:left;font:inherit;color:inherit;background:var(--ivory);border:1px solid var(--stone);border-top:4px solid var(--violet);padding:28px 24px 26px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;cursor:pointer;overflow:hidden;text-decoration:none;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease,background .25s ease}
+.step-card:hover,.step-card:focus-visible{transform:translateY(-8px);box-shadow:0 24px 48px rgba(40,20,92,.16);border-top-color:var(--citrus);background:var(--white)}
+.step-icon{position:relative;z-index:1;width:64px;height:64px;border-radius:50%;background:var(--white);border:2px solid var(--violet);display:grid;place-items:center;color:var(--violet);transition:background .25s ease,color .25s ease,transform .25s ease}
+.step-icon svg{width:28px;height:28px}
+.step-card:hover .step-icon,.step-card:focus-visible .step-icon{background:var(--violet);color:var(--citrus);transform:scale(1.08) rotate(-6deg)}
+.step-num{position:absolute;right:14px;top:6px;font-family:var(--f-display);font-weight:700;font-size:4.5rem;line-height:1;color:var(--stone);transition:color .25s ease}
+.step-card:hover .step-num,.step-card:focus-visible .step-num{color:var(--gold)}
+.step-card h3{font-size:1.25rem;color:var(--violet)}
+.step-card p{color:var(--muted);font-size:.95rem}
+.step-go{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.95rem;color:var(--violet);padding-top:6px}
+.step-go svg{width:18px;height:18px;transition:transform .25s ease}
+.step-card:hover .step-go svg,.step-card:focus-visible .step-go svg{transform:translateX(6px)}
+.step-tag{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.journey.reveal .step{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.journey.reveal.in .step{opacity:1;transform:none}
+.journey.reveal.in .step:nth-child(2){transition-delay:.15s}
+.journey.reveal.in .step:nth-child(3){transition-delay:.3s}
+.journey.reveal.in .step:nth-child(4){transition-delay:.45s}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}.journey-line{display:none}}
 @media (max-width:520px){.steps{grid-template-columns:1fr}}
 
 /* CTA band */
@@ -279,7 +298,7 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
 <!-- ===== Top bar ===== -->
 <div class="topbar">
   <div class="wrap">
-    <a class="tel" href="tel:+234"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg>Admissions: <span class="nc">phone number</span></a>
+    <a class="tel" href="tel:+234"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg>Admissions: <span>+234 XXX XXX XXXX</span></a><!-- TODO: admissions number (also update tel: link) -->
     <button class="btn btn-primary btn-xs" type="button" data-open="prospectus">Download prospectus</button>
   </div>
 </div>
@@ -324,9 +343,7 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
 
 <!-- ===== Hero ===== -->
 <section class="hero on-dark" aria-labelledby="hero-title">
-  <span class="horizon" style="width:900px;height:900px;right:-260px;top:-300px" aria-hidden="true"></span>
-  <span class="horizon" style="width:700px;height:700px;right:-160px;top:-200px" aria-hidden="true"></span>
-  <span class="horizon" style="width:500px;height:500px;right:-60px;top:-100px" aria-hidden="true"></span>
+  <canvas class="hero-bg" id="hero-bg" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="hero-copy">
       <span class="eyebrow">Obafemi Awolowo University · 100% online</span>
@@ -348,12 +365,14 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
 
 <!-- ===== Feature strip ===== -->
 <section class="strip" aria-label="Key facts">
-  <ul class="wrap">
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M2 20h20"/></svg><div><b>100% online</b><span>No campus attendance required</span></div></li>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Flexible schedule</b><span>Study around work and family</span></div></li>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 5h6a2 2 0 012 2v12a2 2 0 00-2-2H4zM20 5h-6a2 2 0 00-2 2v12a2 2 0 012-2h6z"/></svg><div><b>170,000+ resources</b><span>Digital library, with offline access</span></div></li>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 13a8 8 0 0116 0"/><rect x="3" y="13" width="4" height="6" rx="1"/><rect x="17" y="13" width="4" height="6" rx="1"/></svg><div><b>24/7 support</b><span>AI-powered help desk, any time zone</span></div></li>
+  <div class="wrap">
+  <ul class="stats">
+    <li class="stat"><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M2 20h20"/></svg></span><span class="stat-value" data-count="100" data-suffix="%">100%</span><span class="stat-label">Online &amp; flexible</span><span class="stat-sub">No campus visits. Study around your work.</span></li>
+    <li class="stat"><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h6a2 2 0 012 2v12a2 2 0 00-2-2H4zM20 5h-6a2 2 0 00-2 2v12a2 2 0 012-2h6z"/></svg></span><span class="stat-value" data-count="170000" data-suffix="+">170,000+</span><span class="stat-label">Library resources</span><span class="stat-sub">Digital library with offline access.</span></li>
+    <li class="stat"><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span><span class="stat-value" data-count="210000" data-suffix="+">210,000+</span><span class="stat-label">Alumni worldwide</span><span class="stat-sub">Join a global Great Ife network.</span></li>
+    <li class="stat"><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 13a8 8 0 0116 0"/><rect x="3" y="13" width="4" height="6" rx="1"/><rect x="17" y="13" width="4" height="6" rx="1"/></svg></span><span class="stat-value" data-count="24" data-suffix="/7">24/7</span><span class="stat-label">Learner support</span><span class="stat-sub">AI help desk in every time zone.</span></li>
   </ul>
+  </div>
 </section>
 
 <!-- ===== Programmes ===== -->
@@ -363,7 +382,7 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
       <div class="stack">
         <span class="eyebrow">Programmes</span>
         <h2 id="prog-title">Find your path at Great Ife.</h2>
-        <p class="lead">Accredited OAU programmes across business, technology, education, public policy and health, delivered fully online. <span class="nc">approved catalogue and NUC approval for online delivery</span></p>
+        <p class="lead">Accredited OAU programmes across business, technology, education, public policy and health, delivered fully online.</p>
       </div>
       <a class="btn btn-secondary" href="#all-programmes">Explore all programmes</a>
     </div>
@@ -371,30 +390,24 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
       <article class="prog-card">
         <div class="img"><img src="students-outdoors.jpg" alt="Two students studying together on a laptop outdoors" loading="lazy" width="1100" height="733"></div>
         <div class="body">
-          <span class="level">Postgraduate diplomas</span>
-          <h3>Build specialist skills, fast</h3>
-          <p>A focused route into a new field or a step toward a Master's degree.</p>
-          <ul><li>PGD programmes <span class="nc">titles</span></li></ul>
+          <h3>Postgraduate Diplomas</h3>
+          <p>Build specialist skills fast: a focused route into a new field or a step toward a Master's degree.</p>
           <div class="actions"><button class="btn btn-primary btn-sm" type="button" data-open="prospectus" data-prog="Postgraduate Diplomas">Download prospectus</button><a class="link-call" href="#all-programmes">View programmes</a></div>
         </div>
       </article>
       <article class="prog-card">
         <div class="img"><img src="study-group.jpg" alt="Group of learners collaborating around a laptop" loading="lazy" width="1100" height="733"></div>
         <div class="body">
-          <span class="level">Master's degrees</span>
-          <h3>Advance your career</h3>
-          <p>Lead with an OAU Master's, studied alongside your job.</p>
-          <ul><li>MBA, MPA, MSc Cyber Security, MSc Information Systems, MSc Economics, MPH <span class="nc">proposed list</span></li></ul>
+          <h3>Master's Degrees</h3>
+          <p>Advance your career and lead with an OAU Master's, studied alongside your job.</p>
           <div class="actions"><button class="btn btn-primary btn-sm" type="button" data-open="prospectus" data-prog="Master's Degrees">Download prospectus</button><a class="link-call" href="#all-programmes">View programmes</a></div>
         </div>
       </article>
       <article class="prog-card">
         <div class="img"><img src="campus-building.jpg" alt="Campus building" loading="lazy" width="1100" height="696"></div>
         <div class="body">
-          <span class="level">Professional &amp; executive</span>
-          <h3>Upskill without stepping away</h3>
-          <p>Practical programmes for working professionals and sponsored teams.</p>
-          <ul><li>Professional programmes <span class="nc">titles and whether offered</span></li></ul>
+          <h3>Professional &amp; Executive</h3>
+          <p>Upskill without stepping away: practical programmes for working professionals and sponsored teams.</p>
           <div class="actions"><button class="btn btn-primary btn-sm" type="button" data-open="prospectus" data-prog="Professional & Executive">Download prospectus</button><a class="link-call" href="#all-programmes">View programmes</a></div>
         </div>
       </article>
@@ -410,7 +423,7 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
       <h2 id="real-title">A real OAU degree. Delivered entirely online.</h2>
       <p class="lead">OAU eCampus is Obafemi Awolowo University's online campus, created with Astria Learning. OAU sets the curriculum, teaches, examines and awards your degree. You study from wherever life takes you.</p>
       <ul class="checks">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>The same Obafemi Awolowo University degree <span class="nc">certificate wording</span></span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>The same Obafemi Awolowo University degree</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>Study any time, from anywhere, on phone or laptop</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>Learn in a cohort of motivated peers</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>24/7 AI-powered help desk and academic support</span></li>
@@ -422,55 +435,60 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
       <div class="video">
         <img src="students-outdoors.jpg" alt="" loading="lazy" width="1100" height="733">
         <button type="button" aria-label="Play the OAU eCampus video"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button>
-        <span class="cap">Great Ife, wherever you are <span class="nc">hero video (VC, alumni, campus)</span></span>
+        <span class="cap">Great Ife, wherever you are</span>
       </div>
       <figure class="quote">
-        <blockquote>“The OAU-Astria model will provide an excellent e-learning experience with a competitive edge at an affordable cost.”</blockquote>
-        <cite>Prof. Adebayo Simeon Bamire, Vice-Chancellor, Obafemi Awolowo University</cite>
+        <img src="vc-bamire.jpg" alt="Prof. Adebayo Simeon Bamire, Vice-Chancellor of Obafemi Awolowo University" width="120" height="150" loading="lazy">
+        <div class="q">
+          <blockquote>“The OAU-Astria model will provide an excellent e-learning experience with a competitive edge at an affordable cost.”</blockquote>
+          <cite>Prof. Adebayo Simeon Bamire, Vice-Chancellor, Obafemi Awolowo University</cite>
+        </div>
       </figure>
     </div>
   </div>
 </section>
 
-<!-- ===== Feature cards ===== -->
-<section class="section" aria-labelledby="feat-title">
-  <div class="wrap">
-    <div class="section-head"><div class="stack"><span class="eyebrow">The eCampus experience</span><h2 id="feat-title">From heritage to possibility.</h2></div></div>
-    <div class="feature-grid">
-      <div class="feature f-violet">
-        <svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><path d="M24 8L2 18l22 10 22-10z"/><path d="M10 23v9c0 3 6 7 14 7s14-4 14-7v-9l-14 6z" opacity=".75"/></svg>
-        <h3>Academic heritage</h3>
-        <p>Founded in 1962, OAU is one of Nigeria's first-generation universities. Your degree carries that legacy.</p>
-      </div>
-      <div class="feature f-blue">
-        <svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><rect x="8" y="10" width="32" height="22" rx="2" opacity=".75"/><path d="M4 36h40l-3 4H7z"/></svg>
-        <h3>Connected learning</h3>
-        <p>An AI-powered learning platform brings lectures, resources and a community of learners into one place.</p>
-      </div>
-      <div class="feature f-stone">
-        <svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="18" opacity=".35"/><path d="M24 6a18 18 0 0114 29c-4-1-5-5-9-6s-6 3-10 1 0-8-4-10-6 1-7-3A18 18 0 0124 6z"/></svg>
-        <h3>Purposeful progress</h3>
-        <p>Flexible pathways for working professionals: grow your career without leaving your job or city.</p>
-      </div>
-      <div class="feature f-gold">
-        <svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><path d="M8 26a16 16 0 0132 0v8a4 4 0 01-4 4h-4V26h6a14 14 0 00-28 0h6v12h-4a4 4 0 01-4-4z"/></svg>
-        <h3>Never study alone</h3>
-        <p>Round-the-clock help desk support, and advisors who notice early when you need a hand.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===== How it works ===== -->
-<section class="section" id="admissions" style="padding-top:0" aria-labelledby="how-title">
+<section class="section how" id="admissions" aria-labelledby="how-title">
   <div class="wrap">
-    <div class="section-head"><div class="stack"><span class="eyebrow">How it works</span><h2 id="how-title">Four steps to your first class.</h2></div></div>
-    <ol class="steps">
-      <li><h3>Download the prospectus</h3><p>Programme details, fees and entry requirements, sent to your email and WhatsApp.</p><button class="link-call" type="button" data-open="prospectus" style="align-self:flex-start">Download prospectus</button></li>
-      <li><h3>Talk to an advisor</h3><p>Optional. Book a short call to choose the right programme and check eligibility.</p><button class="link-call" type="button" data-open="call" style="align-self:flex-start">Schedule a call</button></li>
-      <li><h3>Apply online</h3><p>Complete your application and upload your documents in one place.</p><a class="link-call" href="#apply">Apply now</a></li>
-      <li id="fees"><h3>Pay and start learning</h3><p>Pay your fees and get your eCampus login. <span class="nc">fees and instalment plans</span></p></li>
-    </ol>
+    <div class="section-head"><div class="stack"><span class="eyebrow">How it works</span><h2 id="how-title">Four steps to your first class.</h2><p class="lead">From your first question to your first lecture, we're with you at every step.</p></div></div>
+    <div class="journey" id="journey">
+      <div class="journey-line" aria-hidden="true"><span></span></div>
+      <ol class="steps">
+        <li class="step"><button class="step-card" type="button" data-open="prospectus">
+          <span class="step-num" aria-hidden="true">01</span>
+          <span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg></span>
+          <span class="step-tag">Start here</span>
+          <h3>Download the prospectus</h3>
+          <p>Programme details, fees and entry requirements, sent to your email and WhatsApp.</p>
+          <span class="step-go">Download prospectus <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button></li>
+        <li class="step"><button class="step-card" type="button" data-open="call">
+          <span class="step-num" aria-hidden="true">02</span>
+          <span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg></span>
+          <span class="step-tag">Optional</span>
+          <h3>Talk to an advisor</h3>
+          <p>Book a short call to choose the right programme and check your eligibility.</p>
+          <span class="step-go">Schedule a call <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button></li>
+        <li class="step"><a class="step-card" href="#apply">
+          <span class="step-num" aria-hidden="true">03</span>
+          <span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+          <span class="step-tag">Apply</span>
+          <h3>Apply online</h3>
+          <p>Complete your application and upload your documents in one place.</p>
+          <span class="step-go">Apply now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a></li>
+        <li class="step" id="fees"><a class="step-card" href="#fees">
+          <span class="step-num" aria-hidden="true">04</span>
+          <span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span>
+          <span class="step-tag">Enrol</span>
+          <h3>Pay and start learning</h3>
+          <p>Pay your fees, get your eCampus login and join your first class.</p>
+          <span class="step-go">See tuition &amp; fees <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a></li>
+      </ol>
+    </div>
   </div>
 </section>
 
@@ -479,14 +497,14 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
   <div class="copy">
     <span class="eyebrow">The next step</span>
     <h2 id="cta-title" style="color:var(--ivory)">Begin with possibility.</h2>
-    <p>Get the prospectus for programme details, fees and entry requirements. Applications for the first cohort open in 2027. <span class="nc">application dates</span></p>
+    <p>Get the prospectus for programme details, fees and entry requirements. Applications for the first cohort open in 2027.</p>
     <div class="cta-row">
       <button class="btn btn-primary" type="button" data-open="prospectus">Download prospectus</button>
       <a class="btn btn-secondary" href="#apply">Apply now</a>
     </div>
     <button class="link-call" type="button" data-open="call" style="align-self:flex-start">Prefer to talk? Schedule a call</button>
   </div>
-  <div class="img"><img src="campus-building.jpg" alt="Obafemi Awolowo University campus building" loading="lazy" width="1100" height="696"><span class="sr-only">Photo needs confirmation as an approved OAU campus image</span></div>
+  <div class="img"><img src="campus-building.jpg" alt="Obafemi Awolowo University campus building" loading="lazy" width="1100" height="696"></div>
 </section>
 
 <!-- ===== FAQ ===== -->
@@ -572,7 +590,7 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
 
 <!-- ===== Cookie consent (NDPA) ===== -->
 <div class="cookie" id="cookie" hidden role="dialog" aria-label="Cookie consent">
-  <p>We use cookies to run this site and, with your permission, to measure and improve our campaigns. <span class="nc">NDPA cookie wording</span></p>
+  <p>We use cookies to run this site and, with your permission, to measure and improve our campaigns.</p>
   <div class="row"><button class="btn btn-primary btn-sm" type="button" data-cookie="accept">Accept</button><button class="btn btn-secondary btn-sm" type="button" data-cookie="deny">Deny</button></div>
 </div>
 
@@ -595,7 +613,7 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
       <div class="field"><label for="p-qual">Highest qualification</label><select id="p-qual" name="qualification" required><option value="">Select</option><option>Bachelor's degree</option><option>HND</option><option>Master's degree</option><option>Other</option></select></div>
       <div class="field"><label for="p-alum">Are you an OAU graduate?</label><select id="p-alum" name="oau_alumni"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
       <label class="check full" for="p-consent"><input type="checkbox" id="p-consent" name="consent" required> I agree to be contacted about OAU eCampus by email, phone and WhatsApp.</label>
-      <p class="form-note full">We'll only use your details to contact you about OAU eCampus. <span class="nc">privacy policy link and NDPA wording</span></p>
+      <p class="form-note full">We'll only use your details to contact you about OAU eCampus. See our <a href="#privacy">privacy policy</a>.</p>
       <p class="form-error full" id="p-error" hidden>Please fill in every field marked above and tick the consent box.</p>
       <div class="full"><button class="btn btn-primary" type="submit" style="width:100%">Send me the prospectus</button></div>
     </form>
@@ -615,7 +633,7 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
   </div>
   <div class="modal-body">
     <!-- TODO: replace with the booking tool embed, synced to 360CRM / Align360. -->
-    <div class="booking-ph">Booking calendar: pick a date and time<br><span class="nc">booking tool, call length and SSC hours (WAT)</span></div>
+    <div class="booking-ph">Booking calendar: pick a date and time</div>
     <form class="form" id="call-form" novalidate style="margin-top:20px">
       <div class="field"><label for="c-name">Full name</label><input id="c-name" name="name" required autocomplete="name"></div>
       <div class="field"><label for="c-phone">Phone / WhatsApp</label><input id="c-phone" name="phone" type="tel" required placeholder="+234 …"></div>
@@ -658,6 +676,60 @@ dialog::backdrop{background:rgba(20,23,40,.6)}
   }
   wire('prospectus-form','prospectus-success','p-error');
   wire('call-form','call-success');
+
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Count-up numbers in the feature strip
+  var nums=document.querySelectorAll('[data-count]');
+  function fmt(n){return n.toLocaleString('en-US');}
+  function run(el){var end=+el.dataset.count,suf=el.dataset.suffix||'',t0=null,d=1800;
+    function tick(t){if(!t0)t0=t;var k=Math.min((t-t0)/d,1),e=1-Math.pow(1-k,3);el.textContent=fmt(Math.round(end*e))+suf;if(k<1)requestAnimationFrame(tick);}
+    requestAnimationFrame(tick);}
+  if('IntersectionObserver' in window&&!reduce){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){run(en.target);io.unobserve(en.target);}});},{threshold:.6});
+    nums.forEach(function(el){el.textContent='0'+(el.dataset.suffix||'');io.observe(el);});
+  }
+
+  // How it works: reveal + progress line
+  var j=document.getElementById('journey');
+  if('IntersectionObserver' in window&&!reduce){
+    j.classList.add('reveal');
+    var jo=new IntersectionObserver(function(es){if(es[0].isIntersecting){j.classList.add('in');jo.disconnect();}},{threshold:.25});
+    jo.observe(j);
+  } else j.classList.add('in');
+
+  // Hero: rotating 3D globe of dots + orbit rings
+  (function(){
+    var c=document.getElementById('hero-bg');if(!c||!c.getContext)return;
+    var x=c.getContext('2d'),hero=c.parentElement,W,H,dpr,pts=[],N=900,rot=0,stars=[];
+    for(var i=0;i<N;i++){var y=1-(i/(N-1))*2,r=Math.sqrt(1-y*y),th=Math.PI*(3-Math.sqrt(5))*i;pts.push([Math.cos(th)*r,y,Math.sin(th)*r]);}
+    for(var k=0;k<70;k++)stars.push({x:Math.random(),y:Math.random(),s:Math.random()*1.4+.4,v:Math.random()*.0001+.00003,a:Math.random()*.5+.15});
+    function size(){dpr=Math.min(window.devicePixelRatio||1,2);W=hero.clientWidth;H=hero.clientHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);}
+    function frame(){
+      x.clearRect(0,0,W,H);
+      var wide=W>900,cx=wide?W*0.72:W*0.5,cy=wide?H*0.5:H*0.28,R=wide?Math.min(H*0.8,W*0.36):Math.min(W*0.7,H*0.34);
+      // drifting particles
+      stars.forEach(function(st){st.y-=st.v*16;if(st.y<0)st.y=1;x.fillStyle='rgba(247,244,237,'+st.a+')';x.beginPath();x.arc(st.x*W,st.y*H,st.s,0,6.283);x.fill();});
+      var tilt=0.38,ct=Math.cos(tilt),stl=Math.sin(tilt),cr=Math.cos(rot),sr=Math.sin(rot);
+      // globe dots
+      for(var i=0;i<N;i++){var p=pts[i],X=p[0]*cr+p[2]*sr,Z=-p[0]*sr+p[2]*cr,Y=p[1]*ct-Z*stl;Z=p[1]*stl+Z*ct;
+        var f=2.6/(2.6-Z),sx=cx+X*R*f,sy=cy+Y*R*f,d=(Z+1)/2;
+        x.fillStyle=d>.5?'rgba(237,186,94,'+(0.25+d*0.6)+')':'rgba(247,244,237,'+(0.1+d*0.25)+')';
+        x.beginPath();x.arc(sx,sy,(0.6+d*1.5),0,6.283);x.fill();}
+      // orbit rings with travelling dots
+      [[1.35,0.9,rot*0.6],[1.6,-0.6,-rot*0.45],[1.85,0.25,rot*0.3]].forEach(function(o,idx){
+        var rr=R*o[0];x.save();x.translate(cx,cy);x.rotate(o[1]);x.scale(1,0.32);
+        x.strokeStyle=idx===0?'rgba(223,255,96,.35)':'rgba(247,244,237,.14)';x.lineWidth=1.2/0.32*0.5;
+        x.beginPath();x.arc(0,0,rr,0,6.283);x.stroke();
+        x.fillStyle=idx===0?'#DFFF60':'#EDBA5E';x.beginPath();x.arc(Math.cos(o[2]*2)*rr,Math.sin(o[2]*2)*rr,4/0.32*0.5,0,6.283);x.fill();
+        x.restore();});
+    }
+    function loop(){rot+=0.0012;frame();raf=requestAnimationFrame(loop);}
+    var raf=null;size();
+    window.addEventListener('resize',function(){size();if(reduce)frame();});
+    if(reduce){frame();return;}
+    if('IntersectionObserver' in window){new IntersectionObserver(function(es){if(es[0].isIntersecting){if(!raf)loop();}else{cancelAnimationFrame(raf);raf=null;}}).observe(hero);}else loop();
+  })();
 
   // Cookie consent
   var c=document.getElementById('cookie'),choice=null;
