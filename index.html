@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OAU eCampus | Earn your Obafemi Awolowo University degree 100% online</title>
+<meta name="description" content="OAU eCampus brings Obafemi Awolowo University's accredited programmes online. Study from anywhere, around work and life, with 24/7 support and a 170,000+ resource digital library.">
+<meta property="og:title" content="OAU eCampus | Great Ife, wherever you are">
+<meta property="og:description" content="Earn your Obafemi Awolowo University degree 100% online.">
+<meta property="og:image" content="assets/hero-graduate.jpg">
+<link rel="icon" href="assets/oau-crest.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;700&display=swap">
+<!--
+  OAU eCampus — Home page (draft v1, 11 Nov 2026)
+  Built from: OAU eCampus Brand Book 2026 (colours, type, components) + the UI and UCC eCampus home page structure.
+  Funnel: Download prospectus (RFI lead → 360CRM / Align360) → email + WhatsApp nurture → Apply now. Schedule a call = assist.
+
+  DEV NOTES
+  - Every element with class="nc" is a NEED CONFIRMATION placeholder. Search for  class="nc"  and replace before go-live.
+  - Forms are front-end only. Wire #prospectus-form and #call-form to the 360CRM / Align360 endpoint (TODO markers below);
+    keep the hidden UTM fields.
+  - Replace href="#apply" with the application portal URL once confirmed.
+  - Stock photos come from the brand book; confirm usage rights and swap in approved OAU campus photos.
+-->
+<style>
+:root{
+  /* Brand Book 2026 palette — Foundation 80% / Heritage 17% / Spark 3% */
+  --violet:#28145C;      /* Ife violet — signature */
+  --gold:#EDBA5E;        /* Crest gold — warmth */
+  --blue:#000093;        /* University blue */
+  --red:#AE152D;         /* Heritage red — supporting */
+  --citrus:#DFFF60;      /* Digital citrus — primary action only */
+  --ink:#141728;         /* Midnight ink — body text */
+  --ivory:#F7F4ED;       /* Warm ivory — canvas */
+  --stone:#D8D3C8;       /* Quiet stone — dividers */
+  --stone-soft:#ECE8DF;
+  --white:#FFFFFF;
+  --muted:#4E5068;
+  --f-display:"Bitter",Georgia,"Times New Roman",serif;
+  --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --wrap:1200px;
+  --radius:4px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.6rem,6vw,4.6rem);letter-spacing:-.01em}
+h2{font-size:clamp(2rem,3.8vw,3rem);color:var(--violet)}
+h3{font-size:1.4rem;font-weight:600}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.on-dark .eyebrow{color:var(--citrus)}
+.lead{font-size:1.15rem;max-width:58ch;color:var(--muted)}
+.rule{width:56px;height:4px;background:var(--citrus);border:0;margin:0}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.on-dark :focus-visible{outline-color:var(--citrus)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* NEED CONFIRMATION placeholder chip */
+.nc{display:inline;background:#FFF1C9;color:#6B4500;border:1px dashed #C98A00;border-radius:3px;padding:0 6px;font:500 .78rem/1.6 var(--f-body);letter-spacing:0;text-transform:none;white-space:normal;vertical-align:middle}
+.nc::before{content:"Need confirmation: ";font-weight:700}
+
+/* Buttons — 56px height, citrus = primary, violet outline = secondary (Brand Book §07) */
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 28px;border-radius:var(--radius);border:2px solid transparent;font:700 1rem var(--f-body);text-decoration:none;cursor:pointer;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--citrus);color:var(--ink);border-color:var(--citrus)}
+.btn-primary:hover{background:#D2F542}
+.btn-secondary{background:transparent;color:var(--violet);border-color:var(--violet)}
+.btn-secondary:hover{background:var(--violet);color:var(--ivory)}
+.on-dark .btn-secondary{color:var(--ivory);border-color:var(--ivory)}
+.on-dark .btn-secondary:hover{background:var(--ivory);color:var(--violet)}
+.btn-sm{min-height:44px;padding:0 18px;font-size:.92rem}
+.link-call{font-weight:700;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px;text-decoration-color:var(--gold);background:none;border:0;padding:0;font-family:inherit;font-size:1rem;color:inherit;cursor:pointer}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
+
+/* Top bar */
+.topbar{background:var(--ink);color:var(--ivory);font-size:.85rem}
+.topbar .wrap{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;justify-content:space-between;min-height:48px;padding-block:7px}
+.topbar .tel{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:500}
+.topbar .tel:hover{text-decoration:underline}
+.btn-xs{min-height:34px;padding:0 16px;font-size:.85rem}
+
+/* Header */
+.site-header{position:sticky;top:0;z-index:40;background:var(--ivory);border-bottom:1px solid var(--stone)}
+.site-header .wrap{display:flex;align-items:center;gap:24px;min-height:84px}
+.brand img{height:44px;width:auto}
+.nav{display:flex;align-items:center;gap:4px;margin-left:auto}
+.nav > ul{display:flex;list-style:none;margin:0;padding:0;gap:2px}
+.nav > ul > li{position:relative}
+.nav > ul > li > a,.nav > ul > li > button{white-space:nowrap;display:flex;align-items:center;gap:6px;padding:10px 12px;font:500 .95rem var(--f-body);color:var(--ink);text-decoration:none;background:none;border:0;cursor:pointer;border-radius:var(--radius)}
+.nav > ul > li > a:hover,.nav > ul > li > button:hover{color:var(--violet);background:var(--stone-soft)}
+.nav a[aria-current="page"]{color:var(--violet);font-weight:700}
+.dropdown{position:absolute;top:100%;left:0;min-width:260px;background:var(--white);border:1px solid var(--stone);box-shadow:0 18px 40px rgba(20,23,40,.12);padding:8px;list-style:none;margin:0;display:none}
+.has-dd:hover .dropdown,.has-dd:focus-within .dropdown,.has-dd.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 12px;text-decoration:none;font-size:.95rem;border-radius:var(--radius)}
+.dropdown a:hover{background:var(--ivory);color:var(--violet)}
+.header-ctas{display:flex;gap:10px;margin-left:12px}
+.menu-toggle{display:none;margin-left:auto;background:none;border:2px solid var(--violet);color:var(--violet);border-radius:var(--radius);min-height:44px;padding:0 14px;font:700 .9rem var(--f-body);cursor:pointer}
+@media (max-width:1260px){
+  .menu-toggle{display:inline-flex;align-items:center}
+  .nav{display:none;position:absolute;left:0;right:0;top:100%;background:var(--ivory);border-bottom:1px solid var(--stone);flex-direction:column;align-items:stretch;padding:12px max(20px,env(safe-area-inset-left,0px)) 20px}
+  .nav.open{display:flex}
+  .nav > ul{flex-direction:column}
+  .dropdown{position:static;display:block;box-shadow:none;border:0;padding:0 0 0 14px;background:transparent}
+  .header-ctas{margin:12px 0 0;flex-direction:column}
+  .header-ctas .btn{width:100%}
+}
+@media (max-width:520px){.brand img{height:34px}}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;background:var(--violet);color:var(--ivory)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding-block:72px 88px}
+.hero .wrap > *{min-width:0}
+.horizon{position:absolute;pointer-events:none;border-radius:50%;border:1px solid rgba(247,244,237,.12)}
+.hero-copy{display:flex;flex-direction:column;gap:24px}
+.hero h1 em{font-style:italic;font-weight:600;color:var(--gold)}
+.hero .lead{color:rgba(247,244,237,.88)}
+.hero-badge{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center;width:fit-content;padding:8px 14px;border:1px solid rgba(247,244,237,.3);border-radius:999px;font-size:.88rem}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--citrus)}
+.hero-figure{position:relative;justify-self:center;width:min(100%,440px);aspect-ratio:1}
+.hero-figure .ring{position:absolute;inset:-18px;border-radius:50%;border:2px solid var(--citrus)}
+.hero-figure .photo{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:var(--white)}
+.hero-figure .photo img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.hero-figure .crest{position:absolute;right:4%;bottom:6%;width:78px;height:78px;border-radius:50%;background:var(--ivory);display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.hero-figure .crest img{width:52px}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr;padding-block:48px 64px;gap:36px}.hero-figure{width:min(64%,280px);order:-1}}
+
+/* Feature strip */
+.strip{background:var(--white);border-bottom:1px solid var(--stone)}
+.strip ul{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.strip li{display:flex;gap:14px;align-items:flex-start;padding:28px 24px;border-left:1px solid var(--stone)}
+.strip li:first-child{border-left:0}
+.strip svg{flex:none;width:36px;height:36px;color:var(--violet)}
+.strip b{display:block;font-family:var(--f-display);font-size:1.2rem;color:var(--violet);line-height:1.2}
+.strip span{font-size:.92rem;color:var(--muted)}
+@media (max-width:900px){.strip ul{grid-template-columns:1fr 1fr}.strip li:nth-child(3){border-left:0}.strip li:nth-child(n+3){border-top:1px solid var(--stone)}}
+@media (max-width:520px){.strip ul{grid-template-columns:1fr}.strip li{border-left:0;border-top:1px solid var(--stone)}.strip li:first-child{border-top:0}}
+
+/* Sections */
+.section{padding-block:96px}
+.section-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:48px}
+.section-head .stack{display:flex;flex-direction:column;gap:14px;max-width:720px}
+.section-head .lead{margin-top:4px}
+@media (max-width:700px){.section{padding-block:64px}}
+
+/* Programme cards */
+.prog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.prog-card{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--stone);min-width:0}
+.prog-card .img{aspect-ratio:16/9;overflow:hidden;background:var(--stone-soft)}
+.prog-card .img img{width:100%;height:100%;object-fit:cover}
+.prog-card .body{display:flex;flex-direction:column;gap:14px;padding:28px;flex:1}
+.prog-card .level{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.prog-card h3{color:var(--violet)}
+.prog-card ul{margin:0;padding-left:18px;color:var(--muted);font-size:.95rem;display:grid;gap:4px}
+.prog-card .actions{margin-top:auto;padding-top:8px;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+@media (max-width:900px){.prog-grid{grid-template-columns:1fr}}
+
+/* Real degree split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.split > *{min-width:0}
+@media (max-width:900px){.split{grid-template-columns:1fr;gap:40px}}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.checks li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
+.checks svg{width:24px;height:24px;color:var(--violet);margin-top:2px}
+.video{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--ink)}
+.video img{width:100%;height:100%;object-fit:cover;opacity:.75}
+.video button{position:absolute;inset:0;margin:auto;width:84px;height:84px;border-radius:50%;border:0;background:var(--citrus);color:var(--ink);cursor:pointer;display:grid;place-items:center}
+.video .cap{position:absolute;left:16px;bottom:14px;right:16px;color:var(--ivory);font-size:.85rem}
+.quote{margin-top:28px;background:var(--violet);color:var(--ivory);padding:32px;display:grid;gap:16px}
+.quote blockquote{margin:0;font-family:var(--f-display);font-size:1.3rem;font-weight:600;line-height:1.4}
+.quote cite{font-style:normal;font-size:.92rem;color:var(--gold)}
+
+/* Brand feature cards (28px padding, 20px gap) */
+.feature-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.feature{padding:28px;display:flex;flex-direction:column;gap:14px;min-width:0;min-height:300px}
+.feature svg{width:44px;height:44px}
+.feature p{font-size:.98rem}
+.f-violet{background:var(--violet);color:var(--ivory)}
+.f-blue{background:var(--blue);color:var(--ivory)}
+.f-stone{background:var(--stone-soft);color:var(--ink)}
+.f-stone h3{color:var(--violet)}
+.f-gold{background:var(--gold);color:var(--ink)}
+.f-violet svg,.f-blue svg{color:var(--gold)}
+.f-stone svg,.f-gold svg{color:var(--violet)}
+@media (max-width:1000px){.feature-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.feature-grid{grid-template-columns:1fr}.feature{min-height:0}}
+
+/* Steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;counter-reset:s}
+.steps li{counter-increment:s;border-top:4px solid var(--violet);padding-top:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.steps li::before{content:"0" counter(s);font-family:var(--f-display);font-size:2.4rem;font-weight:700;color:var(--gold);line-height:1}
+.steps h3{font-size:1.2rem;color:var(--violet)}
+.steps p{color:var(--muted);font-size:.95rem}
+.steps .link-call,.steps a{font-size:.95rem}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* CTA band */
+.cta-band{display:grid;grid-template-columns:1fr 1fr;background:var(--violet);color:var(--ivory)}
+.cta-band .copy{padding:64px clamp(24px,5vw,72px);display:flex;flex-direction:column;gap:20px;justify-content:center}
+.cta-band .copy p{color:rgba(247,244,237,.88);max-width:46ch}
+.cta-band .img{min-height:360px}
+.cta-band .img img{width:100%;height:100%;object-fit:cover}
+@media (max-width:900px){.cta-band{grid-template-columns:1fr}.cta-band .img{min-height:240px;order:-1}}
+
+/* FAQ */
+.faq-wrap{display:flex;flex-direction:column;gap:40px;max-width:900px}
+.faq-wrap > *{min-width:0}
+.faq-list{display:grid;gap:0;border-top:1px solid var(--stone)}
+.faq-list details{border-bottom:1px solid var(--stone)}
+.faq-list summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;padding:22px 0;font-weight:700;font-size:1.05rem}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"+";font-family:var(--f-display);font-size:1.6rem;line-height:1;color:var(--violet);flex:none}
+.faq-list details[open] summary::after{content:"–"}
+.faq-list .ans{padding:0 0 22px;color:var(--muted);max-width:68ch}
+.help-card{background:var(--violet);color:var(--ivory);padding:32px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px}
+.help-card .txt{display:flex;flex-direction:column;gap:8px;max-width:56ch}
+.help-card h3{font-size:1.6rem}
+.help-card p{color:rgba(247,244,237,.88)}
+
+/* Footer */
+.site-footer{background:var(--ink);color:var(--ivory);padding-block:72px 32px;font-size:.95rem}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+.footer-grid > *{min-width:0}
+.site-footer h4{font:700 .8rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 16px}
+.site-footer ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.site-footer a{text-decoration:none;color:rgba(247,244,237,.85)}
+.site-footer a:hover{color:var(--citrus)}
+.site-footer .about{display:flex;flex-direction:column;gap:18px}
+.site-footer .about img{height:46px;width:auto}
+.socials{display:flex;gap:10px}
+.socials a{width:40px;height:40px;border:1px solid rgba(247,244,237,.3);border-radius:50%;display:grid;place-items:center}
+.socials svg{width:18px;height:18px}
+.legal{margin-top:56px;padding-top:24px;border-top:1px solid rgba(247,244,237,.15);display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;font-size:.85rem;color:rgba(247,244,237,.7)}
+@media (max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.footer-grid{grid-template-columns:1fr}}
+
+/* WhatsApp float + cookie bar */
+.wa-float{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;gap:8px;background:#1FA855;color:#fff;text-decoration:none;font-weight:700;font-size:.92rem;padding:12px 18px;border-radius:999px;box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.wa-float svg{width:22px;height:22px}
+.cookie{position:fixed;left:max(20px,env(safe-area-inset-left,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:55;max-width:440px;background:var(--white);border:1px solid var(--stone);box-shadow:0 18px 40px rgba(20,23,40,.18);padding:20px;display:grid;gap:12px;font-size:.9rem}
+.cookie .row{display:flex;gap:10px;flex-wrap:wrap}
+@media (max-width:560px){.cookie{left:0;right:0;bottom:0;max-width:none;border-width:1px 0 0;padding:16px max(20px,env(safe-area-inset-left,0px)) calc(16px + env(safe-area-inset-bottom,0px))}}
+
+/* Modals */
+dialog{border:0;padding:0;width:min(640px,calc(100% - 32px));max-height:calc(100% - 32px);background:var(--ivory);color:var(--ink)}
+dialog::backdrop{background:rgba(20,23,40,.6)}
+.modal-head{background:var(--violet);color:var(--ivory);padding:28px 32px;display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.modal-head h2{color:var(--ivory);font-size:1.8rem}
+.modal-head p{color:rgba(247,244,237,.85);margin-top:8px;font-size:.95rem}
+.modal-close{background:none;border:1px solid rgba(247,244,237,.4);color:var(--ivory);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.2rem;flex:none}
+.modal-body{padding:28px 32px 32px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form .full{grid-column:1/-1}
+@media (max-width:560px){.form{grid-template-columns:1fr}.modal-head,.modal-body{padding-inline:20px}}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-weight:700;font-size:.88rem}
+.field input,.field select{font:inherit;font-size:1rem;min-height:48px;padding:0 12px;border:1px solid var(--stone);border-radius:var(--radius);background:var(--white);color:var(--ink);width:100%}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.9rem}
+.check input{margin-top:4px;width:18px;height:18px;accent-color:var(--violet)}
+.form-note{font-size:.82rem;color:var(--muted)}
+.form-error{color:var(--red);font-weight:700;font-size:.9rem}
+.success{display:grid;gap:16px}
+.success h3{color:var(--violet);font-size:1.6rem}
+.booking-ph{border:1px dashed var(--stone);background:repeating-linear-gradient(135deg,var(--white) 0 12px,var(--stone-soft) 12px 24px);min-height:160px;display:grid;place-items:center;text-align:center;padding:20px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- ===== Top bar ===== -->
+<div class="topbar">
+  <div class="wrap">
+    <a class="tel" href="tel:+234"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg>Admissions: <span class="nc">phone number</span></a>
+    <button class="btn btn-primary btn-xs" type="button" data-open="prospectus">Download prospectus</button>
+  </div>
+</div>
+
+<!-- ===== Header ===== -->
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="OAU eCampus home"><img src="assets/logo-oau-ecampus-light.png" alt="Obafemi Awolowo University eCampus" width="254" height="44"></a>
+    <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="#top" aria-current="page">Home</a></li>
+        <li><a href="#about">About us</a></li>
+        <li class="has-dd">
+          <button type="button" aria-haspopup="true" aria-expanded="false">Academics <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+          <ul class="dropdown">
+            <li><a href="#programmes">Postgraduate Diplomas</a></li>
+            <li><a href="#programmes">Master's Degrees</a></li>
+            <li><a href="#programmes">Professional &amp; Executive</a></li>
+            <li><a href="#programmes">All programmes</a></li>
+          </ul>
+        </li>
+        <li><a href="#admissions">Admissions</a></li>
+        <li><a href="#fees">Tuition &amp; fees</a></li>
+        <li class="has-dd">
+          <button type="button" aria-haspopup="true" aria-expanded="false">Online services <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+          <ul class="dropdown">
+            <li><a href="#digital-library">Astria Digital Library</a></li>
+            <li><a href="#student-portal">Student portal</a></li>
+          </ul>
+        </li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="header-ctas">
+        <a class="btn btn-secondary btn-sm" href="#apply">Apply now</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===== Hero ===== -->
+<section class="hero on-dark" aria-labelledby="hero-title">
+  <span class="horizon" style="width:900px;height:900px;right:-260px;top:-300px" aria-hidden="true"></span>
+  <span class="horizon" style="width:700px;height:700px;right:-160px;top:-200px" aria-hidden="true"></span>
+  <span class="horizon" style="width:500px;height:500px;right:-60px;top:-100px" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow">Obafemi Awolowo University · 100% online</span>
+      <h1 id="hero-title">Great Ife, <em>wherever you are.</em></h1>
+      <hr class="rule">
+      <p class="lead">Earn your Obafemi Awolowo University degree fully online. The same OAU programmes, taught and awarded by OAU, built around your work, your family and your city.</p>
+      <div class="cta-row">
+        <button class="btn btn-primary" type="button" data-open="prospectus">Download prospectus</button>
+        <a class="btn btn-secondary" href="#apply">Apply now</a>
+        <button class="link-call" type="button" data-open="call">Schedule a call with an advisor</button>
+      </div>
+      <span class="hero-badge"><span class="dot" aria-hidden="true"></span>First cohort planned for 2027 <span class="nc">intake date</span></span>
+    </div>
+    <div class="hero-figure">
+      <span class="ring" aria-hidden="true"></span>
+      <div class="photo"><img src="assets/hero-graduate.jpg" alt="Smiling graduate in cap and gown holding her certificate" width="560" height="750"></div>
+      <div class="crest"><img src="assets/oau-crest.png" alt="" width="52" height="54"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Feature strip ===== -->
+<section class="strip" aria-label="Key facts">
+  <ul class="wrap">
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M2 20h20"/></svg><div><b>100% online</b><span>No campus attendance required</span></div></li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Flexible schedule</b><span>Study around work and family</span></div></li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 5h6a2 2 0 012 2v12a2 2 0 00-2-2H4zM20 5h-6a2 2 0 00-2 2v12a2 2 0 012-2h6z"/></svg><div><b>170,000+ resources</b><span>Digital library, with offline access</span></div></li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 13a8 8 0 0116 0"/><rect x="3" y="13" width="4" height="6" rx="1"/><rect x="17" y="13" width="4" height="6" rx="1"/></svg><div><b>24/7 support</b><span>AI-powered help desk, any time zone</span></div></li>
+  </ul>
+</section>
+
+<!-- ===== Programmes ===== -->
+<section class="section" id="programmes" aria-labelledby="prog-title">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="stack">
+        <span class="eyebrow">Programmes</span>
+        <h2 id="prog-title">Find your path at Great Ife.</h2>
+        <p class="lead">Accredited OAU programmes across business, technology, education, public policy and health, delivered fully online. <span class="nc">approved catalogue and NUC approval for online delivery</span></p>
+      </div>
+      <a class="btn btn-secondary" href="#all-programmes">Explore all programmes</a>
+    </div>
+    <div class="prog-grid">
+      <article class="prog-card">
+        <div class="img"><img src="assets/students-outdoors.jpg" alt="Two students studying together on a laptop outdoors" loading="lazy" width="1100" height="733"></div>
+        <div class="body">
+          <span class="level">Postgraduate diplomas</span>
+          <h3>Build specialist skills, fast</h3>
+          <p>A focused route into a new field or a step toward a Master's degree.</p>
+          <ul><li>PGD programmes <span class="nc">titles</span></li></ul>
+          <div class="actions"><button class="btn btn-primary btn-sm" type="button" data-open="prospectus" data-prog="Postgraduate Diplomas">Download prospectus</button><a class="link-call" href="#all-programmes">View programmes</a></div>
+        </div>
+      </article>
+      <article class="prog-card">
+        <div class="img"><img src="assets/study-group.jpg" alt="Group of learners collaborating around a laptop" loading="lazy" width="1100" height="733"></div>
+        <div class="body">
+          <span class="level">Master's degrees</span>
+          <h3>Advance your career</h3>
+          <p>Lead with an OAU Master's, studied alongside your job.</p>
+          <ul><li>MBA, MPA, MSc Cyber Security, MSc Information Systems, MSc Economics, MPH <span class="nc">proposed list</span></li></ul>
+          <div class="actions"><button class="btn btn-primary btn-sm" type="button" data-open="prospectus" data-prog="Master's Degrees">Download prospectus</button><a class="link-call" href="#all-programmes">View programmes</a></div>
+        </div>
+      </article>
+      <article class="prog-card">
+        <div class="img"><img src="assets/campus-building.jpg" alt="Campus building" loading="lazy" width="1100" height="696"></div>
+        <div class="body">
+          <span class="level">Professional &amp; executive</span>
+          <h3>Upskill without stepping away</h3>
+          <p>Practical programmes for working professionals and sponsored teams.</p>
+          <ul><li>Professional programmes <span class="nc">titles and whether offered</span></li></ul>
+          <div class="actions"><button class="btn btn-primary btn-sm" type="button" data-open="prospectus" data-prog="Professional & Executive">Download prospectus</button><a class="link-call" href="#all-programmes">View programmes</a></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== A real OAU degree ===== -->
+<section class="section" id="about" style="background:var(--white);border-block:1px solid var(--stone)" aria-labelledby="real-title">
+  <div class="wrap split">
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <span class="eyebrow">Why OAU eCampus</span>
+      <h2 id="real-title">A real OAU degree. Delivered entirely online.</h2>
+      <p class="lead">OAU eCampus is Obafemi Awolowo University's online campus, created with Astria Learning. OAU sets the curriculum, teaches, examines and awards your degree. You study from wherever life takes you.</p>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>The same Obafemi Awolowo University degree <span class="nc">certificate wording</span></span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>Study any time, from anywhere, on phone or laptop</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>Learn in a cohort of motivated peers</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>24/7 AI-powered help desk and academic support</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>170,000+ academic resources, available offline</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span>Secure online exams with identity-verified proctoring</span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="video">
+        <img src="assets/students-outdoors.jpg" alt="" loading="lazy" width="1100" height="733">
+        <button type="button" aria-label="Play the OAU eCampus video"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button>
+        <span class="cap">Great Ife, wherever you are <span class="nc">hero video (VC, alumni, campus)</span></span>
+      </div>
+      <figure class="quote">
+        <blockquote>“The OAU-Astria model will provide an excellent e-learning experience with a competitive edge at an affordable cost.”</blockquote>
+        <cite>Prof. Adebayo Simeon Bamire, Vice-Chancellor, Obafemi Awolowo University</cite>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Feature cards ===== -->
+<section class="section" aria-labelledby="feat-title">
+  <div class="wrap">
+    <div class="section-head"><div class="stack"><span class="eyebrow">The eCampus experience</span><h2 id="feat-title">From heritage to possibility.</h2></div></div>
+    <div class="feature-grid">
+      <div class="feature f-violet">
+        <svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><path d="M24 8L2 18l22 10 22-10z"/><path d="M10 23v9c0 3 6 7 14 7s14-4 14-7v-9l-14 6z" opacity=".75"/></svg>
+        <h3>Academic heritage</h3>
+        <p>Founded in 1962, OAU is one of Nigeria's first-generation universities. Your degree carries that legacy.</p>
+      </div>
+      <div class="feature f-blue">
+        <svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><rect x="8" y="10" width="32" height="22" rx="2" opacity=".75"/><path d="M4 36h40l-3 4H7z"/></svg>
+        <h3>Connected learning</h3>
+        <p>An AI-powered learning platform brings lectures, resources and a community of learners into one place.</p>
+      </div>
+      <div class="feature f-stone">
+        <svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><circle cx="24" cy="24" r="18" opacity=".35"/><path d="M24 6a18 18 0 0114 29c-4-1-5-5-9-6s-6 3-10 1 0-8-4-10-6 1-7-3A18 18 0 0124 6z"/></svg>
+        <h3>Purposeful progress</h3>
+        <p>Flexible pathways for working professionals: grow your career without leaving your job or city.</p>
+      </div>
+      <div class="feature f-gold">
+        <svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true"><path d="M8 26a16 16 0 0132 0v8a4 4 0 01-4 4h-4V26h6a14 14 0 00-28 0h6v12h-4a4 4 0 01-4-4z"/></svg>
+        <h3>Never study alone</h3>
+        <p>Round-the-clock help desk support, and advisors who notice early when you need a hand.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== How it works ===== -->
+<section class="section" id="admissions" style="padding-top:0" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="section-head"><div class="stack"><span class="eyebrow">How it works</span><h2 id="how-title">Four steps to your first class.</h2></div></div>
+    <ol class="steps">
+      <li><h3>Download the prospectus</h3><p>Programme details, fees and entry requirements, sent to your email and WhatsApp.</p><button class="link-call" type="button" data-open="prospectus" style="align-self:flex-start">Download prospectus</button></li>
+      <li><h3>Talk to an advisor</h3><p>Optional. Book a short call to choose the right programme and check eligibility.</p><button class="link-call" type="button" data-open="call" style="align-self:flex-start">Schedule a call</button></li>
+      <li><h3>Apply online</h3><p>Complete your application and upload your documents in one place.</p><a class="link-call" href="#apply">Apply now</a></li>
+      <li id="fees"><h3>Pay and start learning</h3><p>Pay your fees and get your eCampus login. <span class="nc">fees and instalment plans</span></p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== CTA band ===== -->
+<section class="cta-band on-dark" aria-labelledby="cta-title">
+  <div class="copy">
+    <span class="eyebrow">The next step</span>
+    <h2 id="cta-title" style="color:var(--ivory)">Begin with possibility.</h2>
+    <p>Get the prospectus for programme details, fees and entry requirements. Applications for the first cohort open in 2027. <span class="nc">application dates</span></p>
+    <div class="cta-row">
+      <button class="btn btn-primary" type="button" data-open="prospectus">Download prospectus</button>
+      <a class="btn btn-secondary" href="#apply">Apply now</a>
+    </div>
+    <button class="link-call" type="button" data-open="call" style="align-self:flex-start">Prefer to talk? Schedule a call</button>
+  </div>
+  <div class="img"><img src="assets/campus-building.jpg" alt="Obafemi Awolowo University campus building" loading="lazy" width="1100" height="696"><span class="sr-only">Photo needs confirmation as an approved OAU campus image</span></div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section" id="faq" aria-labelledby="faq-title">
+  <div class="wrap faq-wrap">
+    <div class="section-head" style="margin-bottom:0"><div class="stack"><span class="eyebrow">FAQ</span><h2 id="faq-title">Frequently asked questions</h2></div></div>
+    <div class="faq-list">
+      <details open><summary>What is OAU eCampus?</summary><div class="ans">OAU eCampus is the online campus of Obafemi Awolowo University, Ile-Ife. It delivers OAU's accredited programmes fully online to learners across Nigeria, West Africa and beyond, in partnership with Astria Learning.</div></details>
+      <details><summary>Is an OAU eCampus degree the same as an on-campus degree?</summary><div class="ans">Yes. You study OAU programmes under OAU's academic authority, and your degree is awarded by Obafemi Awolowo University. <span class="nc">certificate wording</span></div></details>
+      <details><summary>Who awards my degree, OAU or Astria?</summary><div class="ans">OAU. Astria Learning provides the online platform and learner support; OAU sets the curriculum, teaches, examines and awards the degree.</div></details>
+      <details><summary>Who can study with OAU eCampus?</summary><div class="ans">Working professionals, OAU alumni, diaspora learners and anyone who meets the entry requirements for their programme. <span class="nc">entry requirements</span></div></details>
+      <details><summary>Can I study while working full-time?</summary><div class="ans">Yes. Programmes are designed for working adults: study in the evenings and at weekends, on your phone or laptop. <span class="nc">weekly study hours</span></div></details>
+      <details><summary>What if my internet or power is unreliable?</summary><div class="ans">You can download resources from the 170,000+ item Astria Digital Library and study offline, then sync when you're back online.</div></details>
+      <details><summary>Can I apply from outside Nigeria?</summary><div class="ans">Yes. OAU eCampus is open to learners across West Africa and the diaspora, with 24/7 support across time zones. <span class="nc">countries and fee currency</span></div></details>
+      <details><summary>How do I apply?</summary><div class="ans">Download the prospectus for your programme, then complete the online application. An advisor can guide you through each step. <span class="nc">application portal link</span></div></details>
+    </div>
+    <div class="help-card">
+      <div class="txt">
+        <h3>Still have questions?</h3>
+        <p>Speak to an advisor from our Student Success team. We'll help you choose a programme and walk you through applying.</p>
+      </div>
+      <button class="btn btn-primary" type="button" data-open="call">Schedule a call</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer" id="contact">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="about">
+        <img src="assets/logo-oau-ecampus-dark.png" alt="Obafemi Awolowo University eCampus" width="266" height="46">
+        <p>OAU eCampus is the online campus of Obafemi Awolowo University, Ile-Ife, delivering OAU's accredited programmes to learners across Nigeria, West Africa and beyond, in partnership with Astria Learning.</p>
+        <div class="socials">
+          <a href="https://facebook.com/OAUniversity" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9V7c0-1 .5-1.5 1.5-1.5H17V2h-3c-3 0-4 2-4 4.5V9H7.5v3.5H10V22h4v-9.5h2.8L17.5 9z"/></svg></a>
+          <a href="#linkedin" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 8h4v13H4zM6 2a2 2 0 110 4 2 2 0 010-4zm5 6h4v2c.6-1 2-2.3 4-2.3 4 0 4.7 2.6 4.7 6V21h-4v-6.2c0-1.5 0-3.3-2-3.3s-2.4 1.6-2.4 3.2V21H11z"/></svg></a>
+          <a href="#youtube" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.5a3 3 0 00-2-2C19 5 12 5 12 5s-7 0-9 .5a3 3 0 00-2 2A31 31 0 00.5 12 31 31 0 001 16.5a3 3 0 002 2c2 .5 9 .5 9 .5s7 0 9-.5a3 3 0 002-2 31 31 0 00.5-4.5 31 31 0 00-.5-4.5zM9.7 15.5v-7l6 3.5z"/></svg></a>
+        </div>
+        <span class="nc">eCampus social handles</span>
+      </div>
+      <div>
+        <h4>Quick links</h4>
+        <ul>
+          <li><a href="#student-portal">Student login</a></li>
+          <li><a href="#digital-library">Astria Digital Library</a></li>
+          <li><a href="#prospectus" data-open="prospectus">Download prospectus</a></li>
+          <li><a href="#apply">Apply now</a></li>
+          <li><a href="#call" data-open="call">Schedule a call</a></li>
+          <li><a href="#contact">Contact us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Study</h4>
+        <ul>
+          <li><a href="#programmes">Postgraduate diplomas</a></li>
+          <li><a href="#programmes">Master's degrees</a></li>
+          <li><a href="#programmes">Professional &amp; executive</a></li>
+          <li><a href="#fees">Tuition &amp; fees</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li>Obafemi Awolowo University, Ile-Ife, Osun State, Nigeria <span class="nc">full eCampus address</span></li>
+          <li>Admissions: <span class="nc">email</span></li>
+          <li>Students: <span class="nc">email</span></li>
+          <li>Phone / WhatsApp: <span class="nc">number</span></li>
+          <li>Media: press@astrialearning.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Obafemi Awolowo University. In partnership with Astria Learning. <span class="nc">copyright holder</span></span>
+      <span><a href="#privacy">Privacy policy</a> · <a href="#terms">Terms</a> · <a href="#cookies">Cookie notice</a> <span class="nc">legal pages</span></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== WhatsApp float ===== -->
+<a class="wa-float" href="#whatsapp" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.2 1.4 2.5 1.5.3.2.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>WhatsApp us</a>
+
+<!-- ===== Cookie consent (NDPA) ===== -->
+<div class="cookie" id="cookie" hidden role="dialog" aria-label="Cookie consent">
+  <p>We use cookies to run this site and, with your permission, to measure and improve our campaigns. <span class="nc">NDPA cookie wording</span></p>
+  <div class="row"><button class="btn btn-primary btn-sm" type="button" data-cookie="accept">Accept</button><button class="btn btn-secondary btn-sm" type="button" data-cookie="deny">Deny</button></div>
+</div>
+
+<!-- ===== Prospectus modal (RFI lead) ===== -->
+<dialog id="prospectus-modal" aria-labelledby="pm-title">
+  <div class="modal-head">
+    <div><h2 id="pm-title">Download your prospectus</h2><p>Programme details, modules, fees and entry requirements, sent to your email and WhatsApp.</p></div>
+    <button class="modal-close" type="button" data-close aria-label="Close">×</button>
+  </div>
+  <div class="modal-body">
+    <!-- TODO: POST to 360CRM / Align360 lead endpoint. Lead source = "Website – Prospectus". -->
+    <form class="form" id="prospectus-form" novalidate>
+      <input type="hidden" name="utm_source" id="utm_source"><input type="hidden" name="utm_medium" id="utm_medium"><input type="hidden" name="utm_campaign" id="utm_campaign">
+      <div class="field"><label for="p-first">First name</label><input id="p-first" name="first_name" required autocomplete="given-name"></div>
+      <div class="field"><label for="p-last">Last name</label><input id="p-last" name="last_name" required autocomplete="family-name"></div>
+      <div class="field"><label for="p-email">Email</label><input id="p-email" name="email" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="p-phone">Phone / WhatsApp</label><input id="p-phone" name="phone" type="tel" required placeholder="+234 …" autocomplete="tel"></div>
+      <div class="field"><label for="p-country">Country of residence</label><select id="p-country" name="country" required><option value="">Select</option><option>Nigeria</option><option>Ghana</option><option>United Kingdom</option><option>United States</option><option>Canada</option><option>Other</option></select></div>
+      <div class="field"><label for="p-prog">Programme of interest</label><select id="p-prog" name="programme" required><option value="">Select</option><option>Postgraduate Diplomas</option><option>Master's Degrees</option><option>Professional &amp; Executive</option><option>Not sure yet</option></select></div>
+      <div class="field"><label for="p-qual">Highest qualification</label><select id="p-qual" name="qualification" required><option value="">Select</option><option>Bachelor's degree</option><option>HND</option><option>Master's degree</option><option>Other</option></select></div>
+      <div class="field"><label for="p-alum">Are you an OAU graduate?</label><select id="p-alum" name="oau_alumni"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+      <label class="check full" for="p-consent"><input type="checkbox" id="p-consent" name="consent" required> I agree to be contacted about OAU eCampus by email, phone and WhatsApp.</label>
+      <p class="form-note full">We'll only use your details to contact you about OAU eCampus. <span class="nc">privacy policy link and NDPA wording</span></p>
+      <p class="form-error full" id="p-error" hidden>Please fill in every field marked above and tick the consent box.</p>
+      <div class="full"><button class="btn btn-primary" type="submit" style="width:100%">Send me the prospectus</button></div>
+    </form>
+    <div class="success" id="prospectus-success" hidden>
+      <h3>Your prospectus is on its way.</h3>
+      <p>Check your email and WhatsApp in the next few minutes. Ready to go further?</p>
+      <div class="cta-row"><a class="btn btn-primary" href="#apply">Apply now</a><button class="btn btn-secondary" type="button" data-open="call">Schedule a call</button></div>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===== Schedule a call modal ===== -->
+<dialog id="call-modal" aria-labelledby="cm-title">
+  <div class="modal-head">
+    <div><h2 id="cm-title">Talk to an advisor</h2><p>Book a free call with our Student Success team. We'll help you choose a programme, check eligibility and walk you through applying.</p></div>
+    <button class="modal-close" type="button" data-close aria-label="Close">×</button>
+  </div>
+  <div class="modal-body">
+    <!-- TODO: replace with the booking tool embed, synced to 360CRM / Align360. -->
+    <div class="booking-ph">Booking calendar: pick a date and time<br><span class="nc">booking tool, call length and SSC hours (WAT)</span></div>
+    <form class="form" id="call-form" novalidate style="margin-top:20px">
+      <div class="field"><label for="c-name">Full name</label><input id="c-name" name="name" required autocomplete="name"></div>
+      <div class="field"><label for="c-phone">Phone / WhatsApp</label><input id="c-phone" name="phone" type="tel" required placeholder="+234 …"></div>
+      <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="c-chan">How should we call you?</label><select id="c-chan" name="channel"><option>Phone</option><option>WhatsApp</option><option>Video call</option></select></div>
+      <div class="full"><button class="btn btn-primary" type="submit" style="width:100%">Book my call</button></div>
+    </form>
+    <div class="success" id="call-success" hidden><h3>Your call is booked.</h3><p>You'll get a confirmation by email and WhatsApp.</p></div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+  // Mobile menu
+  var t=document.getElementById('menu-toggle'),n=document.getElementById('site-nav');
+  t.addEventListener('click',function(){var o=n.classList.toggle('open');t.setAttribute('aria-expanded',o);});
+  n.addEventListener('click',function(e){if(e.target.closest('a'))n.classList.remove('open');});
+  document.querySelectorAll('.has-dd > button').forEach(function(b){b.addEventListener('click',function(){var li=b.parentElement,o=li.classList.toggle('open');b.setAttribute('aria-expanded',o);});});
+
+  // UTM capture for CRM attribution
+  var q=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign'].forEach(function(k){var el=document.getElementById(k);if(el)el.value=q.get(k)||'';});
+
+  // Modals
+  var modals={prospectus:document.getElementById('prospectus-modal'),call:document.getElementById('call-modal')};
+  function open(name,prog){Object.values(modals).forEach(function(m){if(m.open)m.close();});var m=modals[name];if(!m)return;if(prog){var s=document.getElementById('p-prog');s.value=prog;}if(m.showModal)m.showModal();else m.setAttribute('open','');}
+  document.addEventListener('click',function(e){
+    var o=e.target.closest('[data-open]');if(o){e.preventDefault();open(o.dataset.open,o.dataset.prog);return;}
+    if(e.target.closest('[data-close]')){var d=e.target.closest('dialog');d.close();}
+  });
+  Object.values(modals).forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.close();});});
+
+  function wire(formId,successId,errId){
+    var f=document.getElementById(formId);
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(!f.checkValidity()){if(errId)document.getElementById(errId).hidden=false;else f.reportValidity();return;}
+      // TODO: send FormData(f) to the CRM endpoint, then show success.
+      f.hidden=true;document.getElementById(successId).hidden=false;
+    });
+  }
+  wire('prospectus-form','prospectus-success','p-error');
+  wire('call-form','call-success');
+
+  // Cookie consent
+  var c=document.getElementById('cookie'),choice=null;
+  try{choice=localStorage.getItem('oau-cookie');}catch(e){}
+  if(!choice)c.hidden=false;
+  c.addEventListener('click',function(e){var b=e.target.closest('[data-cookie]');if(!b)return;try{localStorage.setItem('oau-cookie',b.dataset.cookie);}catch(err){}c.hidden=true;});
+})();
+</script>
+</body>
+</html>
